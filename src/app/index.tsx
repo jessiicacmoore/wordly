@@ -1,10 +1,13 @@
+import { AppLayout } from "@/components";
 import "./App.css";
 import AppProvider from "./Provider";
 
 function App() {
   return (
     <AppProvider>
-      <h1>Hello World!</h1>
+      <AppLayout>
+        <h1>Hello World!</h1>
+      </AppLayout>
     </AppProvider>
   );
 }
