@@ -1,12 +1,13 @@
 import { AppLayout } from "@/components";
 import "./App.css";
 import AppProvider from "./Provider";
+import { GameView } from "@/features/game";
 
 function App() {
   return (
     <AppProvider>
       <AppLayout>
-        <h1>Hello World!</h1>
+        <GameView />
       </AppLayout>
     </AppProvider>
   );
