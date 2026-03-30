@@ -1,6 +1,7 @@
 import { useGameSession } from "../hooks";
+import { GameBoard } from "./GameBoard";
 
-export const GameView = () => {
+export const Game = () => {
   const {
     activeGame,
     gameStatus,
@@ -9,6 +10,7 @@ export const GameView = () => {
     startNewGame,
     resumeGame,
     abandonGame,
+    handleKeyInput,
   } = useGameSession();
 
   if (gameStatus === "idle" && hasResumableGame) {
@@ -49,13 +51,10 @@ export const GameView = () => {
     return (
       <>
         <h2>Game in Progress</h2>
-        <p>Target word: {activeGame.targetWord}</p>
-        <p>Guesses: {activeGame.guesses.join(", ")}</p>
-        <p>Current guess: {activeGame.currentGuess}</p>
-        {/* Add input and game logic here */}
         <button type="button" onClick={abandonGame}>
           Abandon game
         </button>
+        <GameBoard game={activeGame} onKeyInput={handleKeyInput} />
       </>
     );
   }

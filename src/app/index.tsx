@@ -1,13 +1,13 @@
 import { AppLayout } from "@/components";
 import "./App.css";
 import AppProvider from "./Provider";
-import { GameView } from "@/features/game";
+import { Game } from "@/features/game";
 
 function App() {
   return (
     <AppProvider>
       <AppLayout>
-        <GameView />
+        <Game />
       </AppLayout>
     </AppProvider>
   );

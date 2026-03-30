@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { STATUS, type Status } from "../constants";
+import { useCallback, useEffect, useState } from "react";
+import { ACTIONS, STATUS, type Status } from "../constants";
 import type { Game } from "../types";
-import { getRandomWord, isGame } from "../utils";
+import { getKeyAction, getRandomWord, isGame } from "../utils";
 
 type UseGameSessionReturn = {
   activeGame: Game | null;
@@ -11,10 +11,7 @@ type UseGameSessionReturn = {
   startNewGame: () => void;
   resumeGame: () => void;
   abandonGame: () => void;
-  resetToWelcome: () => void;
-  setCurrentGuess: (guess: string) => void;
-  setGuesses: (updater: string[] | ((prev: string[]) => string[])) => void;
-  setGameStatus: (status: Status) => void;
+  handleKeyInput: (input: string) => void;
 };
 
 export const useGameSession = (
@@ -69,34 +66,60 @@ export const useGameSession = (
     localStorage.removeItem(storageKey);
   };
 
-  const resetToWelcome = () => {
-    setGameStatus(STATUS.IDLE);
-  };
-
-  const setCurrentGuess = (guess: string) => {
+  const submitGuess = useCallback(() => {
     setActiveGame((prev) => {
       if (!prev) return prev;
+      if (prev.currentGuess.length !== prev.targetWord.length) return prev;
 
-      return {
-        ...prev,
-        currentGuess: guess,
-      };
-    });
-  };
+      const nextGuesses = [...prev.guesses, prev.currentGuess];
+      const didWin = prev.currentGuess === prev.targetWord;
+      const didLose = !didWin && nextGuesses.length >= 6;
 
-  const setGuesses = (updater: string[] | ((prev: string[]) => string[])) => {
-    setActiveGame((prev) => {
-      if (!prev) return prev;
-
-      const nextGuesses =
-        typeof updater === "function" ? updater(prev.guesses) : updater;
+      if (didWin) {
+        setGameStatus(STATUS.WON);
+      } else if (didLose) {
+        setGameStatus(STATUS.LOST);
+      }
 
       return {
         ...prev,
         guesses: nextGuesses,
+        currentGuess: "",
       };
     });
-  };
+  }, []);
+
+  const handleKeyInput = useCallback(
+    (input: string) => {
+      setActiveGame((prev) => {
+        if (!prev || gameStatus !== STATUS.PLAYING) return prev;
+
+        const action = getKeyAction({
+          input,
+          currentGuess: prev.currentGuess,
+        });
+
+        switch (action.type) {
+          case ACTIONS.ADD:
+          case ACTIONS.DELETE:
+            return {
+              ...prev,
+              currentGuess: action.value,
+            };
+          case ACTIONS.SUBMIT:
+            return prev;
+          case ACTIONS.NOOP:
+          default:
+            return prev;
+        }
+      });
+
+      if (input === "Enter") {
+        submitGuess();
+      }
+    },
+    [gameStatus, submitGuess],
+  );
 
   return {
     activeGame,
@@ -106,9 +129,6 @@ export const useGameSession = (
     startNewGame,
     resumeGame,
     abandonGame,
-    resetToWelcome,
-    setCurrentGuess,
-    setGuesses,
-    setGameStatus,
+    handleKeyInput
   };
 };

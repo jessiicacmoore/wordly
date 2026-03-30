@@ -1,2 +1,2 @@
-export { GameView } from "./components";
+export { Game } from "./components";
 export { useGameSession } from "./hooks";

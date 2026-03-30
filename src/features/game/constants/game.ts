@@ -6,3 +6,20 @@ export const STATUS = {
 } as const;
 
 export type Status = (typeof STATUS)[keyof typeof STATUS];
+
+export const TILE_STATUS = {
+  ABSENT: "absent",
+  PRESENT: "present",
+  CORRECT: "correct",
+} as const;
+
+export type TileStatus = (typeof TILE_STATUS)[keyof typeof TILE_STATUS];
+
+export const ACTIONS = {
+  ADD: "add",
+  DELETE: "delete",
+  SUBMIT: "submit",
+  NOOP: "noop",
+} as const;
+
+export type Action = (typeof ACTIONS)[keyof typeof ACTIONS];
