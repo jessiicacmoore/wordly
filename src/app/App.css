@@ -11,12 +11,34 @@
   --color-bg: var(--color-gray-50);
   --color-bg-alt: var(--color-lighter-gray);
   --color-text: var(--color-gray-900);
+
+  --color-button-primary: var(--color-accent);
+  --color-button-primary-hover: var(--color-accent-hover);
+  --color-button-primary-text: var(--color-white);
+
+  --color-button-secondary: var(--color-white);
+  --color-button-secondary-hover: var(--color-gray-100);
+  --color-button-secondary-text: var(--color-gray-900);
+  --color-button-secondary-border: var(--color-gray-300);
+
+  --color-focus-ring: color-mix(in oklab, var(--color-accent) 45%, white);
 }
 
 .dark {
   --color-bg: #0f172a;
   --color-bg-alt: var(--color-slate-800);
   --color-text: var(--color-gray-100);
+
+  --color-button-primary: var(--color-indigo-500);
+  --color-button-primary-hover: var(--color-indigo-400);
+  --color-button-primary-text: var(--color-white);
+
+  --color-button-secondary: var(--color-slate-800);
+  --color-button-secondary-hover: var(--color-slate-700);
+  --color-button-secondary-text: var(--color-gray-100);
+  --color-button-secondary-border: var(--color-slate-600);
+
+  --color-focus-ring: color-mix(in oklab, var(--color-accent) 55%, white);
 }
 
 @layer base {
@@ -26,5 +48,14 @@
 
   a {
     @apply underline;
+  }
+
+  a,
+  button {
+    @apply cursor-pointer;
+  }
+
+  main p {
+    @apply mb-4 text-base;
   }
 }
