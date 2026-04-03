@@ -68,7 +68,7 @@
   --color-tile-unknown-border: var(--color-slate-600);
   --color-tile-unknown-text: var(--color-gray-100);
 
-  --color-key-bg: var(--color-slate-700);
+  --color-key-bg: var(--color-slate-800);
   --color-key-hover: var(--color-slate-600);
   --color-key-text: var(--color-gray-100);
 }
