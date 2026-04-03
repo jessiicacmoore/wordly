@@ -1,2 +1,2 @@
-export { WORDS } from "./words";
+export { GAME_WORDS, WORDS } from "./words";
 export * from "./game";

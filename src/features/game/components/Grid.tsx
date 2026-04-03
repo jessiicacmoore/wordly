@@ -1,41 +1,27 @@
-import { getTileStatuses } from "../utils";
+import type { TileStatus } from "../constants";
+import type { Game } from "../types";
+import { buildGridRows, getTileStatuses } from "../utils";
+import { GridRow } from "./GridRow";
 
 type GridProps = {
-  guesses: string[];
-  currentGuess: string;
-  targetWord: string;
+  game: Game;
 };
 
-export const Grid = ({ guesses, currentGuess, targetWord }: GridProps) => {
-  const rows = Array.from({ length: 6 }, (_, i) => {
-    if (i < guesses.length) return guesses[i];
+const EMPTY_ROW_STATUSES: TileStatus[] = Array(5).fill("");
 
-    if (i === guesses.length) return currentGuess;
-
-    return "";
-  });
+export const Grid = ({ game }: GridProps) => {
+  const { guesses, currentGuess, targetWord } = game;
+  const rows = buildGridRows(guesses, currentGuess);
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-2">
       {rows.map((row, rowIndex) => {
-        const letters = row.padEnd(5).split("");
         const statuses =
           rowIndex < guesses.length
-            ? getTileStatuses(guesses[rowIndex], targetWord)
-            : Array(5).fill("");
+            ? getTileStatuses(row, targetWord)
+            : EMPTY_ROW_STATUSES;
 
-        return (
-          <div key={rowIndex} className="flex gap-3">
-            {letters.map((letter, letterIndex) => (
-              <div
-                key={letterIndex}
-                className={`tile ${statuses[letterIndex]} flex h-14 w-14 items-center justify-center border text-lg font-bold uppercase`}
-              >
-                {letter}
-              </div>
-            ))}
-          </div>
-        );
+        return <GridRow key={rowIndex} row={row} statuses={statuses} />;
       })}
     </div>
   );

@@ -14,6 +14,13 @@ export const TILE_STATUS = {
 } as const;
 
 export type TileStatus = (typeof TILE_STATUS)[keyof typeof TILE_STATUS];
+export type KeyStatus = Exclude<TileStatus, "">;
+
+export const KEY_STATUS_PRIORITY: Record<KeyStatus, number> = {
+  [TILE_STATUS.ABSENT]: 0,
+  [TILE_STATUS.PRESENT]: 1,
+  [TILE_STATUS.CORRECT]: 2,
+};
 
 export const ACTIONS = {
   ADD: "add",

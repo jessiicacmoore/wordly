@@ -1,9 +1,16 @@
-import { TILE_STATUS, WORDS, ACTIONS, type TileStatus } from "../constants";
+import {
+  TILE_STATUS,
+  GAME_WORDS,
+  ACTIONS,
+  type TileStatus,
+  type KeyStatus,
+  KEY_STATUS_PRIORITY,
+} from "../constants";
 import type { Game } from "../types";
 
 export const getRandomWord = (): string => {
-  const randomIndex = Math.floor(Math.random() * WORDS.length);
-  return WORDS[randomIndex];
+  const randomIndex = Math.floor(Math.random() * GAME_WORDS.length);
+  return GAME_WORDS[randomIndex];
 };
 
 export const isGame = (value: unknown): value is Game => {
@@ -67,10 +74,13 @@ export const getTileStatuses = (
   guess: string,
   target: string,
 ): TileStatus[] => {
+  if (guess.length !== target.length) {
+    return Array(guess.length).fill(TILE_STATUS.ABSENT);
+  }
+
   const result: TileStatus[] = Array(guess.length).fill(TILE_STATUS.ABSENT);
   const targetLetters = target.split("");
 
-  // First pass: exact matches
   for (let i = 0; i < guess.length; i++) {
     if (guess[i] === target[i]) {
       result[i] = TILE_STATUS.CORRECT;
@@ -78,7 +88,6 @@ export const getTileStatuses = (
     }
   }
 
-  // Second pass: wrong position matches
   for (let i = 0; i < guess.length; i++) {
     if (result[i] === TILE_STATUS.CORRECT) continue;
 
@@ -90,4 +99,55 @@ export const getTileStatuses = (
   }
 
   return result;
+};
+
+type GuessLetterResult = {
+  letter: string;
+  status: KeyStatus;
+};
+
+export const getGuessLetterResults = (
+  guess: string,
+  target: string,
+): GuessLetterResult[] => {
+  const statuses = getTileStatuses(guess, target);
+
+  return guess.split("").map((letter, index) => ({
+    letter: letter.toLowerCase(),
+    status: statuses[index] as KeyStatus,
+  }));
+};
+
+export const getKeyboardStatuses = (
+  guesses: string[],
+  target: string,
+): Partial<Record<string, KeyStatus>> => {
+  return guesses.reduce<Partial<Record<string, KeyStatus>>>((acc, guess) => {
+    const results = getGuessLetterResults(guess, target);
+
+    results.forEach(({ letter, status }) => {
+      const currentStatus = acc[letter];
+
+      if (
+        !currentStatus ||
+        KEY_STATUS_PRIORITY[status] > KEY_STATUS_PRIORITY[currentStatus]
+      ) {
+        acc[letter] = status;
+      }
+    });
+
+    return acc;
+  }, {});
+};
+
+export const buildGridRows = (
+  guesses: string[],
+  currentGuess: string,
+  maxRows = 6,
+): string[] => {
+  return Array.from({ length: maxRows }, (_, index) => {
+    if (index < guesses.length) return guesses[index];
+    if (index === guesses.length) return currentGuess;
+    return "";
+  });
 };

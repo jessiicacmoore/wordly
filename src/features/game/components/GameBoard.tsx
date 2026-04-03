@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import type { Game } from "../types";
 import { Grid } from "./Grid";
+import { Keyboard } from "./Keyboard";
+import { getKeyboardStatuses } from "../utils";
 
 type GameBoardProps = {
   game: Game;
@@ -8,7 +10,8 @@ type GameBoardProps = {
 };
 
 export const GameBoard = ({ game, onKeyInput }: GameBoardProps) => {
-  const { targetWord, guesses, currentGuess } = game;
+  const { targetWord, guesses } = game;
+  const keyStatuses = getKeyboardStatuses(guesses, targetWord);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -22,11 +25,8 @@ export const GameBoard = ({ game, onKeyInput }: GameBoardProps) => {
   return (
     <div className="flex flex-col items-center gap-6">
       <p>Target word: {targetWord}</p>
-      <Grid
-        guesses={guesses}
-        currentGuess={currentGuess}
-        targetWord={targetWord}
-      />
+      <Grid game={game} />
+      <Keyboard onKeyPress={onKeyInput} keyStatuses={keyStatuses} />
     </div>
   );
 };
