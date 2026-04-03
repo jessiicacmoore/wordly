@@ -7,10 +7,7 @@ type GameBoardProps = {
   onKeyInput: (input: string) => void;
 };
 
-export const GameBoard = ({
-  game,
-  onKeyInput
-}: GameBoardProps) => {
+export const GameBoard = ({ game, onKeyInput }: GameBoardProps) => {
   const { targetWord, guesses, currentGuess } = game;
 
   useEffect(() => {
@@ -23,10 +20,8 @@ export const GameBoard = ({
   }, [onKeyInput]);
 
   return (
-    <div>
-      <p>Current guess: {currentGuess}</p>
-      <p className="mb-12">Target word: {targetWord}</p>
-
+    <div className="flex flex-col items-center gap-6">
+      <p>Target word: {targetWord}</p>
       <Grid
         guesses={guesses}
         currentGuess={currentGuess}

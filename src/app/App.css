@@ -22,6 +22,14 @@
   --color-button-secondary-border: var(--color-gray-300);
 
   --color-focus-ring: color-mix(in oklab, var(--color-accent) 45%, white);
+
+  --color-tile-correct: var(--color-green-500);
+  --color-tile-present: var(--color-yellow-500);
+  --color-tile-absent: var(--color-gray-500);
+
+  --color-tile-unknown-bg: var(--color-white);
+  --color-tile-unknown-border: var(--color-gray-300);
+  --color-tile-unknown-text: var(--color-gray-900);
 }
 
 .dark {
@@ -39,6 +47,14 @@
   --color-button-secondary-border: var(--color-slate-600);
 
   --color-focus-ring: color-mix(in oklab, var(--color-accent) 55%, white);
+
+  --color-tile-correct: var(--color-green-400);
+  --color-tile-present: var(--color-yellow-400);
+  --color-tile-absent: var(--color-gray-600);
+
+  --color-tile-unknown-bg: var(--color-slate-800);
+  --color-tile-unknown-border: var(--color-slate-600);
+  --color-tile-unknown-text: var(--color-gray-100);
 }
 
 @layer base {
@@ -57,5 +73,23 @@
 
   main p {
     @apply mb-4 text-base;
+  }
+}
+
+@layer utilities {
+  .tile {
+    @apply bg-tile-unknown-bg border-tile-unknown-border text-tile-unknown-text border-2 transition-colors duration-300;
+  }
+
+  .tile.correct {
+    @apply bg-tile-correct border-tile-correct text-white;
+  }
+
+  .tile.present {
+    @apply bg-tile-present border-tile-present text-white;
+  }
+
+  .tile.absent {
+    @apply bg-tile-absent border-tile-absent text-white;
   }
 }

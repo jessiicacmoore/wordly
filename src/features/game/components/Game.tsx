@@ -36,15 +36,7 @@ export const Game = () => {
   }
 
   if (gameStatus === "playing" && activeGame) {
-    return (
-      <>
-        <h2>Game in Progress</h2>
-        <button type="button" onClick={abandonGame}>
-          Abandon game
-        </button>
-        <GameBoard game={activeGame} onKeyInput={handleKeyInput} />
-      </>
-    );
+    return <GameBoard game={activeGame} onKeyInput={handleKeyInput} />;
   }
 
   return null;

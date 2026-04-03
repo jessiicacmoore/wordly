@@ -16,7 +16,7 @@ export const Grid = ({ guesses, currentGuess, targetWord }: GridProps) => {
   });
 
   return (
-    <div>
+    <div className="flex flex-col gap-3">
       {rows.map((row, rowIndex) => {
         const letters = row.padEnd(5).split("");
         const statuses =
@@ -25,11 +25,11 @@ export const Grid = ({ guesses, currentGuess, targetWord }: GridProps) => {
             : Array(5).fill("");
 
         return (
-          <div key={rowIndex}>
+          <div key={rowIndex} className="flex gap-3">
             {letters.map((letter, letterIndex) => (
               <div
                 key={letterIndex}
-                className={`tile ${statuses[letterIndex]}`}
+                className={`tile ${statuses[letterIndex]} flex h-14 w-14 items-center justify-center border text-lg font-bold uppercase`}
               >
                 {letter}
               </div>
