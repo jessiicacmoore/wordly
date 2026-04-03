@@ -15,11 +15,11 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
           </h1>
         </Container>
       </header>
-      <main className="flex flex-1 flex-col justify-center align-middle">
+      <main className="flex flex-1 flex-col justify-center py-2 align-middle">
         <Container>{children}</Container>
       </main>
       <footer className="bg-bg-alt pt-5 pb-8">
-        <Container className="flex items-center">
+        <Container className="flex flex-col items-center gap-4 sm:flex-row sm:gap-0">
           <div className="flex flex-1 justify-start">
             <ThemeToggle />
           </div>
@@ -31,7 +31,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
           </div>
           <div className="flex flex-1 justify-end">
             <nav aria-label="Footer Navigation">
-              <ul className="flex space-x-4 text-sm font-bold">
+              <ul className="flex flex-col items-center gap-2 text-sm font-bold sm:flex-row sm:gap-0 sm:space-x-4">
                 <li>
                   <a
                     href="https://www.linkedin.com/in/jesscodes/"
