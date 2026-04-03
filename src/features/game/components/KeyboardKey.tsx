@@ -17,7 +17,11 @@ export const KeyboardKey = ({ value, status, onPress }: KeyboardKeyProps) => {
     <button
       type="button"
       onClick={() => onPress(value)}
-      className={cn("keycap", isWide ? "min-w-18" : "w-10", status)}
+      className={cn(
+        "keycap",
+        isWide ? "min-w-[3.2rem] md:min-w-18" : "w-8 md:w-10",
+        status,
+      )}
       aria-label={isBackspace ? "Delete letter" : value}
     >
       {isBackspace ? "⌫" : value}

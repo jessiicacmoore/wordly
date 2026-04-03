@@ -16,7 +16,7 @@ export const Keyboard = ({ onKeyPress, keyStatuses = {} }: KeyboardProps) => {
   return (
     <div className="flex w-full max-w-xl flex-col gap-2">
       {KEYBOARD_ROWS.map((row, rowIndex) => (
-        <div key={rowIndex} className="flex justify-center gap-2">
+        <div key={rowIndex} className="flex flex-wrap justify-center gap-1">
           {row.map((key) => (
             <KeyboardKey
               key={key}
