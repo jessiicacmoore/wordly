@@ -15,6 +15,13 @@ export const GameBoard = ({ game, onKeyInput }: GameBoardProps) => {
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
+      if (event.isComposing) return;
+
+      const target = event.target as HTMLElement;
+      if (["BUTTON", "INPUT", "A"].includes(target.tagName)) {
+        return;
+      }
+
       onKeyInput(event.key);
     }
 
