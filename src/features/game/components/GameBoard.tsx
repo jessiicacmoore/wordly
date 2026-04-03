@@ -3,13 +3,19 @@ import type { Game } from "../types";
 import { Grid } from "./Grid";
 import { Keyboard } from "./Keyboard";
 import { getKeyboardStatuses } from "../utils";
+import { GameToast } from "./GameToast";
 
 type GameBoardProps = {
   game: Game;
+  feedbackMessage: string | null;
   onKeyInput: (input: string) => void;
 };
 
-export const GameBoard = ({ game, onKeyInput }: GameBoardProps) => {
+export const GameBoard = ({
+  game,
+  feedbackMessage,
+  onKeyInput,
+}: GameBoardProps) => {
   const { targetWord, guesses } = game;
   const keyStatuses = getKeyboardStatuses(guesses, targetWord);
 
@@ -30,8 +36,10 @@ export const GameBoard = ({ game, onKeyInput }: GameBoardProps) => {
   }, [onKeyInput]);
 
   return (
-    <div className="flex flex-col items-center gap-6">
-      <p>Target word: {targetWord}</p>
+    <div className="relative flex flex-col items-center gap-6">
+      <div className="pointer-events-none absolute top-2 left-1/2 z-10 -translate-x-1/2">
+        <GameToast message={feedbackMessage} />
+      </div>
       <Grid game={game} />
       <Keyboard onKeyPress={onKeyInput} keyStatuses={keyStatuses} />
     </div>

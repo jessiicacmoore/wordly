@@ -1,13 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ACTIONS, STATUS, type Status } from "../constants";
 import type { Game } from "../types";
-import { getKeyAction, getRandomWord, isGame } from "../utils";
+import { getKeyAction, getRandomWord, isGame, isValidWord } from "../utils";
 
 type UseGameSessionReturn = {
   activeGame: Game | null;
   gameStatus: Status;
   hasResumableGame: boolean;
   isGameOver: boolean;
+  feedbackMessage: string | null;
   startNewGame: () => void;
   resumeGame: () => void;
   abandonGame: () => void;
@@ -28,8 +29,8 @@ export const useGameSession = (
       return null;
     }
   });
-
   const [gameStatus, setGameStatus] = useState<Status>(STATUS.IDLE);
+  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (!activeGame || gameStatus !== "playing") {
@@ -66,13 +67,40 @@ export const useGameSession = (
     localStorage.removeItem(storageKey);
   };
 
+  const timeoutRef = useRef<number | null>(null);
+
+  const showFeedback = useCallback((message: string) => {
+    setFeedbackMessage(message);
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = window.setTimeout(() => {
+      setFeedbackMessage(null);
+    }, 1600);
+  }, []);
+
   const submitGuess = useCallback(() => {
+    if (!activeGame) return;
+
+    const guess = activeGame.currentGuess;
+
+    if (guess.length !== activeGame.targetWord.length) {
+      showFeedback("Not enough letters");
+      return;
+    }
+
+    if (!isValidWord(guess)) {
+      showFeedback("Not in word list");
+      return;
+    }
+
     setActiveGame((prev) => {
       if (!prev) return prev;
-      if (prev.currentGuess.length !== prev.targetWord.length) return prev;
 
-      const nextGuesses = [...prev.guesses, prev.currentGuess];
-      const didWin = prev.currentGuess === prev.targetWord;
+      const nextGuesses = [...prev.guesses, guess];
+      const didWin = guess === prev.targetWord;
       const didLose = !didWin && nextGuesses.length >= 6;
 
       if (didWin) {
@@ -87,7 +115,7 @@ export const useGameSession = (
         currentGuess: "",
       };
     });
-  }, []);
+  }, [activeGame, showFeedback]);
 
   const handleKeyInput = useCallback(
     (input: string) => {
@@ -126,9 +154,10 @@ export const useGameSession = (
     gameStatus,
     hasResumableGame,
     isGameOver,
+    feedbackMessage,
     startNewGame,
     resumeGame,
     abandonGame,
-    handleKeyInput
+    handleKeyInput,
   };
 };

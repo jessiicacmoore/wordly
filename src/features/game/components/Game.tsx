@@ -8,6 +8,7 @@ export const Game = () => {
     gameStatus,
     hasResumableGame,
     isGameOver,
+    feedbackMessage,
     startNewGame,
     resumeGame,
     abandonGame,
@@ -36,7 +37,13 @@ export const Game = () => {
   }
 
   if (gameStatus === "playing" && activeGame) {
-    return <GameBoard game={activeGame} onKeyInput={handleKeyInput} />;
+    return (
+      <GameBoard
+        game={activeGame}
+        feedbackMessage={feedbackMessage}
+        onKeyInput={handleKeyInput}
+      />
+    );
   }
 
   return null;

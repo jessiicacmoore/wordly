@@ -5,6 +5,7 @@ import {
   type TileStatus,
   type KeyStatus,
   KEY_STATUS_PRIORITY,
+  WORDS,
 } from "../constants";
 import type { Game } from "../types";
 
@@ -12,6 +13,10 @@ export const getRandomWord = (): string => {
   const randomIndex = Math.floor(Math.random() * GAME_WORDS.length);
   return GAME_WORDS[randomIndex];
 };
+
+export const isValidWord = (word: string): boolean => {
+  return WORDS.includes(word.toLowerCase());
+}
 
 export const isGame = (value: unknown): value is Game => {
   if (!value || typeof value !== "object") return false;
